@@ -3,6 +3,8 @@
     "target": "es2015",
     "module": "ES2015",
     "sourceMap": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Node",
     "baseUrl": ".",
     "paths": {
       "tslib": ["node_modules/tslib/tslib.d.ts"]

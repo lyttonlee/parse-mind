@@ -2,10 +2,12 @@
  * @Author: lyttonlee lzr3278@163.com
  * @Date: 2022-09-19 17:00:00
  * @LastEditors: lyttonlee lzr3278@163.com
- * @LastEditTime: 2022-09-20 13:48:45
+ * @LastEditTime: 2022-09-26 15:14:48
  * @FilePath: \mind-lib\src\main.ts
  * @Description:
  * */
+
+import * as jszip from 'jszip';
 
 interface XmindData {
   id: string;
@@ -43,6 +45,23 @@ const exts = ['xmind'];
  */
 function isXMind(fileContent: string): boolean {
   return fileContent.indexOf('content.json') !== -1;
+}
+
+let xmindFiles = ['manifest.json', 'content.json', 'metadata.json'];
+
+function getContentJson(file: File): Promise<Array<JsonDataSheet>> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { files } = await jszip.loadAsync(file);
+      // 仅解析 content.json
+      let contentJson = await files[xmindFiles[1]].async('string');
+      let resJson: Array<JsonDataSheet> = JSON.parse(contentJson);
+      // console.log(resJson);
+      resolve(resJson);
+    } catch (error) {
+      reject(error);
+    }
+  });
 }
 
 function readFile(file: File): Promise<string> {
@@ -108,8 +127,10 @@ function jsonToJsmindData(jsonData: Array<JsonDataSheet>) {
 export async function parseXmindFileToJson(
   file: File
 ): Promise<JsonDataSheet[]> {
-  const fileContent = await readFile(file);
-  return fileContentToJson(fileContent);
+  // const fileContent = await readFile(file);
+  // return fileContentToJson(fileContent);
+  const jsonData = await getContentJson(file);
+  return jsonData;
 }
 
 /**
@@ -118,7 +139,8 @@ export async function parseXmindFileToJson(
  * @return {Promise} Promise
  */
 export async function parseXindFileToJsmind(file: File) {
-  const fileContent = await readFile(file);
-  const jsonData = fileContentToJson(fileContent);
+  // const fileContent = await readFile(file);
+  // const jsonData = fileContentToJson(fileContent);
+  const jsonData = await getContentJson(file);
   return jsonToJsmindData(jsonData);
 }

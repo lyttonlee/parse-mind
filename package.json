@@ -1,7 +1,7 @@
 {
   "name": "parse-mind",
-  "version": "1.0.1",
-  "description": "一个可以解析xmind文件为json 的工具",
+  "version": "1.0.2",
+  "description": "一个可以读取xmind文件为json 的小工具",
   "homepage": "https://github.com/lyttonlee/parse-mind",
   "type": "module",
   "types": "./dist/parse-mind.d.ts",
@@ -23,5 +23,8 @@
     "rollup-plugin-typescript2": "^0.34.0",
     "tslib": "^2.4.0",
     "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1"
   }
 }
